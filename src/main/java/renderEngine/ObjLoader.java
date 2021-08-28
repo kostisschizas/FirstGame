@@ -41,24 +41,7 @@ public class ObjLoader {
 
         //incomplete
         //System.out.println(meshes.length);
-        return loader.loadToVAO(processVertices(meshes[0]),processTexCoords(meshes[0]),processIndices(meshes[0]));
-
-
-
-
-        /*Obj obj=null;
-        try {
-            obj= ObjReader.read(inputStream);
-        } catch (IOException e) {
-            System.err.println("Could not load OBJ file!");
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        obj=ObjUtils.convertToRenderable(obj);
-
-        return loader.loadToVAO(ObjData.getVerticesArray(obj),ObjData.getTexCoordsArray(obj,2), ObjData.getFaceVertexIndicesArray(obj));
-
-         */
+        return loader.loadToVAO(processVertices(meshes[0]),processTexCoords(meshes[0]),processIndices(meshes[0]),processNormals(meshes[0]));
 
     }
 
@@ -104,5 +87,19 @@ public class ObjLoader {
         }
         return texCoordsArray;
     }
+
+    private static float[] processNormals(AIMesh mesh){
+        AIVector3D.Buffer aiNormals = mesh.mNormals();
+        int remaining = aiNormals.remaining();
+        float[] normalsArray=new float[remaining*3];
+        for (int i=0;i<remaining;i++){
+            AIVector3D vector = aiNormals.get();
+            normalsArray[3*i]=vector.x();
+            normalsArray[3*i+1]=vector.y();
+            normalsArray[3*i+2]=vector.z();
+        }
+        return normalsArray;
+    }
+
 
 }
